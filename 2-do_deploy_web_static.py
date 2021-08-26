@@ -21,14 +21,14 @@ def do_deploy(archive_path):
         localpath = archive_path.split('/')[1]
         newpath = localpath.split('.')[0]
         rempath = "/data/web_static/releases/"
-        put("{}".format(archive_path), "/tmp/{}".format(localpath))
-        run("mkdir -p /data/web_static/releases/{}/".format(newpath))
+        put(archive_path, "/tmp".format(localpath))
+        run("mkdir -p {}{}/".format(rempath, newpath))
         run("tar -xzf /tmp/{} -C {}{}/".format(localpath, rempath, newpath))
         run("rm /tmp/{}".format(localpath))
         run("mv {r}{l}/web_static/* {r}{l}/".format(r=rempath, l=newpath))
         run("rm -rf {}{}/web_static".format(rempath, newpath))
         run("rm -rf /data/web_static/current")
-        run("ln -s {}{} /data/web_static/current".format(rempath, newpath))
+        run("ln -s {}{}/ /data/web_static/current".format(rempath, newpath))
         return True
     except:
         return False
