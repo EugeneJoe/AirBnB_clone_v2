@@ -3,7 +3,7 @@
 Distributes an archive to web servers
 """
 
-from fabric.api import *
+from fabric.api import run, put, env
 import os
 
 
@@ -17,7 +17,7 @@ def do_deploy(archive_path):
     """ Distributes an archive to web servers """
     if not os.path.exists(archive_path):
         return False
-    else:
+    try:
         localpath = archive_path.split('/')[1]
         newpath = localpath.split('.')[0]
         rempath = "/data/web_static/releases/"
@@ -28,8 +28,7 @@ def do_deploy(archive_path):
         run("mv {r}{l}/web_static/* {r}{l}/".format(r=rempath, l=newpath))
         run("rm -rf {}{}/web_static".format(rempath, newpath))
         run("rm -rf /data/web_static/current")
-        rr = run("ln -s {}{} /data/web_static/current".format(rempath, newpath))
-        if rr.succeeded:
-            return True
-        else:
-            return False
+        run("ln -s {}{} /data/web_static/current".format(rempath, newpath))
+        return True
+    except:
+        return False
