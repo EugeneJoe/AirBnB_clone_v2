@@ -51,7 +51,6 @@ def do_deploy(archive_path):
         return False
 
 
-
 def deploy():
     """ Call the do_pack() function and based on its return value,
         call do_deploy or return False
