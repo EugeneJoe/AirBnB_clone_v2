@@ -12,7 +12,7 @@
 # If the symbolic link already exists, it should be deleted and recreated every time the script is ran.
 # Give ownership of the /data/ folder to the ubuntu user AND group (you can assume this user and gro\up exist).
 # This should be recursive; everything inside should be created/owned by this user/group.
-# Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static (ex: https://mydomainname.tech/hbnb_static).
+ # Update the Nginx configuration to serve the content of /data/web_static/current/ to hbnb_static (ex: https://mydomainname.tech/hbnb_static).
 # Restart Nginx after updating the configuration:
 
 # Check if nginx is installed and if not, install it
