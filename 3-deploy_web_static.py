@@ -4,8 +4,8 @@ Creates and distributes an archive to web servers
 """
 
 from datetime import datetime
-from fabric.api import *
-import os
+from fabric.api import run, local, env, put
+from os.path import isfile, exists
 
 
 env.hosts = [
@@ -19,10 +19,9 @@ def do_pack():
     now = datetime.now()
     now_str = now.strftime("%Y%m%d%H%M%S")
     now_str = now_str.replace('/', '')
-    if not os.path.exists('versions'):
-        os.makedirs('versions')
+    if not exists('versions'):
+        local("mkdir versions")
     tar_name = "versions/web_static_{}.tgz".format(now_str)
-    print("Packing web_static to {}".format(tar_name))
     result = local("tar -cvzf {} web_static".format(tar_name))
     if result.succeeded:
         return tar_name
@@ -32,24 +31,25 @@ def do_pack():
 
 def do_deploy(archive_path):
     """ Distributes an archive to web servers """
-    if not os.path.exists(archive_path):
+    if not isfile(archive_path):
         return False
-    else:
+    try:
         localpath = archive_path.split('/')[1]
         newpath = localpath.split('.')[0]
         rempath = "/data/web_static/releases/"
-        put("{}".format(archive_path), "/tmp/{}".format(localpath))
-        run("mkdir -p /data/web_static/releases/{}/".format(newpath))
-        run("tar -xzf /tmp/{} -C {}{}/".format(localpath, rempath, newpath))
+
+        put(archive_path, "/tmp/".format(localpath))
+        run("mkdir -p {}{}".format(rempath, newpath))
+        run("tar -xzf /tmp/{} -C {}{}".format(localpath, rempath, newpath))
         run("rm /tmp/{}".format(localpath))
-        run("mv {r}{l}/web_static/* {r}{l}/".format(r=rempath, l=newpath))
+        run("mv {0}{1}/web_static/* {0}{1}/".format(rempath, newpath))
         run("rm -rf {}{}/web_static".format(rempath, newpath))
         run("rm -rf /data/web_static/current")
-        rr = run("ln -s {}{} /data/web_static/current".format(rempath, newpath))
-        if rr.succeeded:
-            return True
-        else:
-            return False
+        run("ln -s {}{}/ /data/web_static/current".format(rempath, newpath))
+        return True
+    except:
+        return False
+
 
 
 def deploy():
