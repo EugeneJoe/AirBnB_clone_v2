@@ -4,7 +4,7 @@ Distributes an archive to web servers
 """
 
 from fabric.api import run, put, env
-import os
+from os.path import isfile
 
 
 env.hosts = ['34.139.119.72', '34.139.135.201']
@@ -12,12 +12,13 @@ env.hosts = ['34.139.119.72', '34.139.135.201']
 
 def do_deploy(archive_path):
     """ Distributes an archive to web servers """
-    if not os.path.exists(archive_path):
+    if not isfile(archive_path):
         return False
     try:
         localpath = archive_path.split('/')[1]
         newpath = localpath.split('.')[0]
         rempath = "/data/web_static/releases/"
+
         put(archive_path, "/tmp/".format(localpath))
         run("mkdir -p {}{}".format(rempath, newpath))
         run("tar -xzf /tmp/{} -C {}{}".format(localpath, rempath, newpath))
