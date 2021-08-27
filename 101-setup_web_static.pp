@@ -7,26 +7,31 @@ exec { 'Update':
   returns  => [0,1],
 }
 
-exec { 'Install_nginx':
-  require  => Exec['Update'],
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin'],
-  command  => 'sudo apt-get install nginx -y',
-  provider => 'shell',
-  returns  => [0,1],
+package { 'nginx':
+  ensure => 'present',
 }
 
-exec { '/data/':
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin'],
-  command  => 'sudo mkdir -p /data/web_static/releases/test',
-  provider => 'shell',
-  returns  => [0,1],
+file { '/data':
+  ensure  => 'directory',
+}
+
+file { '/data/web_static':
+  ensure => 'directory',
+}
+
+file { '/data/web_static/releases':
+  ensure => 'directory',
+}
+
+file { '/data/web_static/releases/test':
+  ensure => 'directory',
 }
 
 file { '/data/web_static/shared':
   ensure => 'directory',
 }
 
-$html="<html>
+$html = "<html>
   <head>
   </head>
   <body>
@@ -40,8 +45,8 @@ file { '/data/web_static/releases/test/index.html':
 }
 
 file { '/data/web_static/current':
-  ensure  => 'link',
-  target  => '/data/web_static/releases/data/',
+  ensure => 'link',
+  target => '/data/web_static/releases/data/',
 }
 
 exec { 'permissions':
