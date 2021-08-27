@@ -61,6 +61,7 @@ file { '/data/web_static/releases/test/index.html':
 file { '/data/web_static/current':
   ensure => 'link',
   target => '/data/web_static/releases/data/',
+  force	 => 'yes',
 } ->
 
 exec { 'chown -R ubuntu:ubuntu /data/':
