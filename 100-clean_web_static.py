@@ -18,7 +18,7 @@ def do_clean(number=0):
     old_new = sorted(listdir("versions"))
     [old_new.pop() for i in range(number) if old_new]
     with lcd("versions"):
-            [local("rm -rf ./{}".format(arch)) for arch in old_new]
+            [local("rm ./{}".format(arch)) for arch in old_new]
 
     with cd("/data/web_static/releases"):
         files = run("ls -tr").split()
