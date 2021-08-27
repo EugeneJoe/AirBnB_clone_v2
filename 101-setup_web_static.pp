@@ -100,7 +100,6 @@ file { '/var/www/html/404.html':
 file { '/etc/nginx/sites-available/default':
   ensure  => 'present',
   content => $var,
-  require => Package['nginx'],
 } ->
 
 service { 'nginx':
