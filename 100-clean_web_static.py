@@ -20,7 +20,7 @@ def do_clean(number=0):
             [local("rm ./{}".format(arch)) for arch in old_new]
 
     with cd("/data/web_static/releases"):
-        files = run("ls -tr").split()
-        old_new = [a for a in files if "web_static_" in a]
-        [old_new.pop() for i in range(number) if old_new]
-        [sudo("rm -rf ./{}".format(arch)) for arch in old_new]
+        archives = run("ls -tr").split()
+        archives = [a for a in archives if "web_static_" in a]
+        [archives.pop() for i in range(number)]
+        [sudo("rm -rf ./{}".format(a)) for a in archives]
