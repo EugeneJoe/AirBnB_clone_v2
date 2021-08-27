@@ -1,25 +1,21 @@
 #!/usr/bin/python3
 """
-Creates and distributes an archive to web servers
+Distributes an archive to web servers
 """
-
 from datetime import datetime
-from fabric.api import run, local, env, put, sudo
-from os.path import isfile, exists
+from fabric.api import run, put, env, sudo, local
+import os
+from os.path import isfile
 
 
-env.hosts = [
-    '34.139.119.72',
-    '34.139.135.201'
-]
-
+env.hosts = ['34.139.119.72', '34.139.135.201']
 
 def do_pack():
     """ Creates a .tgz archive from the contents of the web_static folder """
     now = datetime.now()
     now_str = now.strftime("%Y%m%d%H%M%S")
     now_str = now_str.replace('/', '')
-    if not exists('versions'):
+    if not os.path.exists('versions'):
         local("mkdir versions")
     tar_name = "versions/web_static_{}.tgz".format(now_str)
     result = local("tar -cvzf {} web_static".format(tar_name))
@@ -52,11 +48,10 @@ def do_deploy(archive_path):
 
 
 def deploy():
-    """ Call the do_pack() function and based on its return value,
-        call do_deploy or return False
-    """
-    result = do_pack()
-    if result:
-        return do_deploy(result)
-    else:
+    """ Creates an archive of web_static and deploys it to my servers """
+    archive = do_pack()
+    if archive is None:
+        print("No archive")
         return False
+    else:
+        return do_deploy(archive)
