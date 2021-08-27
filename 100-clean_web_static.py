@@ -15,7 +15,7 @@ def do_clean(number=0):
         number = int(number)
 
     old_new = sorted(listdir("versions"))
-    [old_new.pop() for i in range(number) if old_new]
+    [old_new.pop() for i in range(number)]
     with lcd("versions"):
             [local("rm ./{}".format(arch)) for arch in old_new]
 
