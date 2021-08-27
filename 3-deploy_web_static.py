@@ -4,7 +4,7 @@ Creates and distributes an archive to web servers
 """
 
 from datetime import datetime
-from fabric.api import run, local, env, put
+from fabric.api import run, local, env, put, sudo
 from os.path import isfile, exists
 
 
