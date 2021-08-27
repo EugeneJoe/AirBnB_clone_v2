@@ -38,7 +38,7 @@ def do_deploy(archive_path):
         newpath = localpath.split('.')[0]
         rempath = "/data/web_static/releases/"
 
-        put(archive_path, "/tmp/".format(localpath))
+        put(archive_path, "/tmp/")
         sudo("mkdir -p {}{}".format(rempath, newpath))
         sudo("tar -xzf /tmp/{} -C {}{}".format(localpath, rempath, newpath))
         sudo("rm /tmp/{}".format(localpath))
@@ -58,3 +58,5 @@ def deploy():
     result = do_pack()
     if result:
         return do_deploy(result)
+    else:
+        return False

@@ -24,7 +24,6 @@ def do_deploy(archive_path):
         sudo("tar -xzf /tmp/{} -C {}{}".format(localpath, rempath, newpath))
         sudo("rm /tmp/{}".format(localpath))
         sudo("cp -r {0}{1}/web_static/* {0}{1}/".format(rempath, newpath))
-#        run("rm -rf {}{}/web_static/*".format(rempath, newpath))
         sudo("rm -rf {}{}/web_static".format(rempath, newpath))
         sudo("rm -rf /data/web_static/current")
         sudo("ln -s {}{}/ /data/web_static/current".format(rempath, newpath))
