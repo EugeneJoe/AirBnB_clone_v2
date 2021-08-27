@@ -20,6 +20,6 @@ def do_pack():
     tar_name = "versions/web_static_{}.tgz".format(now_str)
     result = local("tar -cvzf {} web_static".format(tar_name))
     if result.succeeded:
-        tar_name
+        return tar_name
     else:
         return None
