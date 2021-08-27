@@ -22,6 +22,10 @@ exec { '/data/':
   returns  => [0,1],
 }
 
+file { '/data/web_static/shared':
+  ensure => 'directory',
+}
+
 $html="<html>
   <head>
   </head>
@@ -33,19 +37,15 @@ $html="<html>
 file { '/data/web_static/releases/test/index.html':
   ensure  => file,
   content => $html,
-  require => Exec['/data/']
 }
 
-exec { 'link':
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin'],
-  command  => 'ln -sfn /data/web_static/releases/test /data/web_static/current',
-  provider => 'shell',
-  return   => [0,1],
-  require  => Exec['/data/']
+file { '/data/web_static/current':
+  ensure  => 'link',
+  target  => '/data/web_static/releases/data/',
 }
 
 exec { 'permissions':
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin'],
+  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin', 'usr/local/bin'],
   command  => 'chown -R ubuntu:ubuntu /data/',
   provider => 'shell',
   returns  => [0,1],
@@ -63,12 +63,9 @@ $var="server {
 permanent;
 }"
 
-exec { 'configuration':
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin'],
-  command  => 'echo $var > /etc/nginx/sites-available/default'
-  provider => 'shell',
-  returns  => [0,1],
-  require  => Exec['Install_nginx'],
+file { '/etc/nginx/sites-available/default':
+  ensure  => 'present',
+  content => $var,
 }
 
 exec { 'start_server':
