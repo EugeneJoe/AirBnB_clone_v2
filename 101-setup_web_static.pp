@@ -11,10 +11,13 @@ $html = "<html>
 $var="server {
         listen 80 default_server;
         listen [::]:80 default_server;
+
         location /hbnb_static {
             alias /data/web_static/current/;
         }
+
         add_header X-Served-By ${hostname};
+
         rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGU1\wu4 \
 permanent;
 }"
@@ -60,23 +63,15 @@ file { '/data/web_static/current':
   target => '/data/web_static/releases/data/',
 } ->
 
-exec { 'permissions':
+exec { 'chown -R ubuntu:ubuntu /data/':
   path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin', 'usr/local/bin'],
-  command  => 'chown -R ubuntu:ubuntu /data/',
-  provider => 'shell',
-  returns  => [0,1],
-  require  => Exec['/data/'],
-} ->
+}
 
 file { '/etc/nginx/sites-available/default':
   ensure  => 'present',
   content => $var,
 } ->
 
-exec { 'start_server':
-  require  => Exec['configuration'],
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin'],
-  command  => 'sudo service nginx start',
-  provider => 'shell',
-  returns  => [0,1],
+service { 'nginx':
+  ensure => 'running',
 }
