@@ -10,6 +10,7 @@ from os.path import isfile
 
 env.hosts = ['34.139.119.72', '34.139.135.201']
 
+
 def do_pack():
     """ Creates a .tgz archive from the contents of the web_static folder """
     now = datetime.now()
