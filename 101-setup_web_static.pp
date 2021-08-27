@@ -64,8 +64,10 @@ file { '/data/web_static/current':
   force	 => 'yes',
 } ->
 
-exec { 'chown -R ubuntu:ubuntu /data/':
-  path => ['/usr/bin', '/sbin', '/bin', '/usr/sbin', 'usr/local/bin'],
+exec { 'permissions' :
+  path    => ['/usr/bin', '/sbin', '/bin', '/usr/sbin', 'usr/local/bin'],
+  command => 'chown -R ubuntu:ubuntu /data/',
+  returns => [0,1],
 }
 
 file { '/etc/nginx/sites-available/default':
