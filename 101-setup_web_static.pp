@@ -16,7 +16,7 @@ $var="server {
 	index index.html index.htm;
 
         location /hbnb_static {
-            alias /data/web_static/current/;
+            alias /data/web_static/current;
 	    index index.html index.htm;
         }
 
@@ -63,13 +63,13 @@ file { '/data/web_static/shared':
 } ->
 
 file { '/data/web_static/releases/test/index.html':
-  ensure  => present,
+  ensure  => 'present',
   content => $html,
 } ->
 
 file { '/data/web_static/current':
   ensure => 'link',
-  target => '/data/web_static/releases/data/',
+  target => '/data/web_static/releases/test',
   force  => 'yes',
 } ->
 
