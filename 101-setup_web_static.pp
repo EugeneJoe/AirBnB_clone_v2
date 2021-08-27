@@ -64,12 +64,13 @@ file { '/data/web_static/current':
 } ->
 
 exec { 'chown -R ubuntu:ubuntu /data/':
-  path     => ['/usr/bin', '/sbin', '/bin', '/usr/sbin', 'usr/local/bin'],
+  path => ['/usr/bin', '/sbin', '/bin', '/usr/sbin', 'usr/local/bin'],
 }
 
 file { '/etc/nginx/sites-available/default':
   ensure  => 'present',
   content => $var,
+  require => Package['nginx'],
 } ->
 
 service { 'nginx':
