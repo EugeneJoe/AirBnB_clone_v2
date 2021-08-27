@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Deletes out-of-date archives """
-
 from os import listdir
 from fabric.api import run, local, cd, lcd, env
 
