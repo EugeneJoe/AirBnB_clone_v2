@@ -4,17 +4,24 @@ import uuid
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
+from os import getenv
 
 
-Base = declarative_base()
+if getenv("HBNB_TYPE_STORAGE") == 'db':
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
     """A base class for all hbnb models"""
 
-    id = Column(String(60), nullable=False, primary_key=True)
-    created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
+    if getenv("HBNB_TYPE_STORAGE") == 'db':
+        id = Column(String(60), nullable=False, primary_key=True)
+        created_at = Column(DateTime,
+                            default=datetime.utcnow(), nullable=False)
+        updated_at = Column(DateTime,
+                            default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
@@ -28,11 +35,15 @@ class BaseModel:
                 key = 'updated_at'
                 kwargs[key] = datetime.strptime(kwargs[key],
                                                 '%Y-%m-%dT%H:%M:%S.%f')
+            else:
+                self.updated_at = datetime.now()
+
             if 'created_at' in kwargs.keys():
                 key = 'created_at'
                 kwargs[key] = datetime.strptime(kwargs[key],
                                                 '%Y-%m-%dT%H:%M:%S.%f')
-
+            else:
+                self.created_at = datetime.now()
             if '__class__' in kwargs.keys():
                 del kwargs['__class__']
             if 'id' not in kwargs.keys():
@@ -42,7 +53,7 @@ class BaseModel:
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.to_dict())
+        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
