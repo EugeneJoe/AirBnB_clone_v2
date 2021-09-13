@@ -49,7 +49,7 @@ class test_City(test_basemodel):
     def test_str(self):
         """Test that the str method has the correct output"""
         city = self.value()
-        string = "[City] ({}) {}".format(city.id, city.to_dict())
+        string = "[City] ({}) {}".format(city.id, city.__dict__)
         self.assertEqual(string, str(city))
 
 

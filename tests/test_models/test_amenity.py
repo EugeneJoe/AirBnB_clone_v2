@@ -85,5 +85,5 @@ class test_Amenity(test_basemodel):
     def test_str(self):
         """test that the str method has the correct output"""
         amenity = Amenity()
-        string = "[Amenity] ({}) {}".format(amenity.id, amenity.to_dict())
+        string = "[Amenity] ({}) {}".format(amenity.id, amenity.__dict__)
         self.assertEqual(string, str(amenity))

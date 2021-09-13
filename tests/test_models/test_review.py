@@ -55,7 +55,7 @@ class test_review(test_basemodel):
     def test_str(self):
         """test that the str method has the correct output"""
         review = self.value()
-        string = "[Review] ({}) {}".format(review.id, review.to_dict())
+        string = "[Review] ({}) {}".format(review.id, review.__dict__)
         self.assertEqual(string, str(review))
 
 

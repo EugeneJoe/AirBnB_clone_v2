@@ -60,7 +60,7 @@ class test_basemodel(unittest.TestCase):
         """ Test return value of str method """
         i = self.value()
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
-                                                       i.to_dict()))
+                                                       i.__dict__))
 
     def test_todict(self):
         """ Test to_dict method returns required value """
