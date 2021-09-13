@@ -86,3 +86,7 @@ class DBStorage:
         """
         if obj:
             self.__session.delete(obj)
+
+    def close(self):
+        """ Close Session """
+        self.__session.close()
